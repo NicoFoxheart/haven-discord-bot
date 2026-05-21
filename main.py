@@ -396,6 +396,140 @@ async def journal(interaction: discord.Interaction, feeling: str):
     embed.set_footer(text="This is just for you. Your feelings are valid. 💙🦊")
     await interaction.response.send_message(embed=embed, ephemeral=True)
 
+# /checkup command - NEW!
+@tree.command(name="checkup", description="Check up on someone in your community 💙")
+@app_commands.describe(member="Who do you want to check on?")
+async def checkup(interaction: discord.Interaction, member: discord.Member):
+    checkup_messages = [
+        f"💙 Hey {member.mention} — {interaction.user.display_name} is thinking about you. How are you really doing?",
+        f"👀 {member.mention}, {interaction.user.display_name} wanted to check in on you. Everything okay? 🦊",
+        f"🦊 {interaction.user.display_name} is checking on you, {member.mention}. You don't have to be okay — just be honest. 💙",
+        f"💙 {member.mention} — {interaction.user.display_name} cares about you. How's your heart today?",
+        f"🌙 Hey {member.mention}, {interaction.user.display_name} noticed you and wanted to see how you're holding up. 💙",
+    ]
+    await interaction.response.send_message(random.choice(checkup_messages))
+
+# /fortune command - NEW!
+@tree.command(name="fortune", description="Receive a gentle uplifting fortune cookie message 🥠")
+async def fortune(interaction: discord.Interaction):
+    fortunes = [
+        "🥠 Your kindness will return to you when you need it most.",
+        "🥠 The storm you're in will pass. You've weathered worse.",
+        "🥠 Someone is thinking of you right now, even if you don't know it. 💙",
+        "🥠 Small steps still move you forward. Keep going. 🦊",
+        "🥠 You are exactly where you need to be, even if it doesn't feel like it.",
+        "🥠 The universe is conspiring to help you, not hurt you. ✨",
+        "🥠 Your presence matters more than you know. 💙",
+        "🥠 Tomorrow holds something good for you. Trust it. 🌙",
+        "🥠 You will find rest soon. Hold on a little longer.",
+        "🥠 The weight you carry will lighten. Be patient with yourself. 🦊",
+        "🥠 You are not behind. You are not failing. You are surviving. 💙",
+        "🥠 Someone's life is better because you exist. ✨",
+        "🥠 Your feelings are temporary. Your worth is permanent. 💙",
+        "🥠 The sun will rise again tomorrow. So will you. 🌅",
+        "🥠 You are doing better than you think you are. 🦊💙"
+    ]
+    embed = discord.Embed(
+        title="🥠 Your Fortune",
+        description=random.choice(fortunes),
+        color=discord.Color.gold()
+    )
+    embed.set_footer(text="You opened this fortune at the right time. 💙")
+    await interaction.response.send_message(embed=embed)
+
+# /pet command - NEW!
+@tree.command(name="pet", description="A comforting story about a little animal friend 🦊")
+async def pet(interaction: discord.Interaction):
+    pet_stories = [
+        {
+            "title": "🦊 The Little Fox",
+            "story": (
+                "There's a little fox who lives at the edge of the forest. "
+                "Every night, it sits under the stars and thinks about the people it cares about.\n\n"
+                "Tonight, it's thinking about you. It wants you to know that even when you feel alone, "
+                "you're not. The fox is out there, sending you quiet strength through the dark.\n\n"
+                "You're going to be okay. The fox believes in you. 🦊💙"
+            )
+        },
+        {
+            "title": "🐱 The Sleepy Cat",
+            "story": (
+                "There's a little cat curled up on a warm windowsill, watching the world go by.\n\n"
+                "It doesn't worry about tomorrow. It doesn't stress about yesterday. "
+                "It just exists, peacefully, in this moment.\n\n"
+                "The cat wants to remind you: it's okay to just be. "
+                "You don't have to do anything right now. Just rest. Just breathe. 🐱💙"
+            )
+        },
+        {
+            "title": "🐶 The Loyal Dog",
+            "story": (
+                "There's a dog sitting by the door, waiting for its person to come home.\n\n"
+                "It doesn't care if they had a bad day. It doesn't care if they're struggling. "
+                "All it cares about is: they're here. They came back.\n\n"
+                "You came back today too. You're still here. And that's enough. "
+                "You're enough. 🐶💙"
+            )
+        },
+        {
+            "title": "🦊 The Brave Fox",
+            "story": (
+                "There's a little fox who's been through a lot. Harsh winters, hungry nights, storms that felt endless.\n\n"
+                "But every morning, it wakes up and keeps going. Not because it's fearless — "
+                "but because it's brave.\n\n"
+                "You're like that fox. You've been through hard things. And you're still here. "
+                "That's bravery. That's strength. 🦊💙"
+            )
+        },
+        {
+            "title": "🐱 The Curious Cat",
+            "story": (
+                "There's a little cat who finds wonder in the smallest things. "
+                "A leaf. A shadow. A beam of light.\n\n"
+                "It doesn't need grand things to feel joy. It finds magic in the ordinary.\n\n"
+                "Maybe today, you can be like that cat. Find one small thing that feels good. "
+                "That's enough. 🐱✨"
+            )
+        },
+        {
+            "title": "🐶 The Gentle Dog",
+            "story": (
+                "There's a dog who knows when someone is sad. It doesn't try to fix it. "
+                "It doesn't give advice. It just sits close. Just stays.\n\n"
+                "Sometimes that's all we need — someone to just be there.\n\n"
+                "I'm here. The fox is here. You're not alone. 🐶💙"
+            )
+        },
+        {
+            "title": "🦊 The Tired Fox",
+            "story": (
+                "There's a little fox who's been running all day. It's exhausted. Its paws hurt. "
+                "It just wants to rest.\n\n"
+                "So it finds a quiet spot under a tree, curls up, and closes its eyes.\n\n"
+                "It's okay to be tired. It's okay to stop. Rest isn't giving up — it's taking care of yourself. "
+                "🦊🌙"
+            )
+        },
+        {
+            "title": "🐱 The Window Cat",
+            "story": (
+                "There's a cat who loves to watch the rain. It sits at the window, safe and warm inside, "
+                "watching the storm outside.\n\n"
+                "The rain doesn't scare it. It knows it's safe.\n\n"
+                "You're safe too. The storm is outside. You're inside. You're okay. 🐱🌧️"
+            )
+        }
+    ]
+    
+    story = random.choice(pet_stories)
+    embed = discord.Embed(
+        title=story["title"],
+        description=story["story"],
+        color=discord.Color.orange()
+    )
+    embed.set_footer(text="You are loved. You are seen. You matter. 💙🦊")
+    await interaction.response.send_message(embed=embed)
+
 # Check-in channel ID — set CHECKIN_CHANNEL_ID in Secrets
 CHECKIN_CHANNEL_ID = os.environ.get("CHECKIN_CHANNEL_ID")
 
@@ -464,7 +598,7 @@ class CheckInForm(discord.ui.Modal, title="📋 Mental Health Check-In"):
         else:
             await interaction.followup.send(embed=embed)
 
-# Keep-alive web server so Replit deployment health checks pass
+# Keep-alive web server so Railway deployment health checks pass
 class HealthHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         self.send_response(200)
