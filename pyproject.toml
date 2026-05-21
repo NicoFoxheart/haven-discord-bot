@@ -1,0 +1,8 @@
+[project]
+name = "haven-discord-bot"
+version = "0.1.0"
+description = "Haven mental health support Discord bot"
+requires-python = ">=3.11"
+dependencies = [
+    "discord-py>=2.7.1",
+]
