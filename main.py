@@ -1245,7 +1245,7 @@ class HealthHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         self.send_response(200)
         self.end_headers()
-        self.wfile.write(b"Haven Bot is running! 🦊💙")
+        self.wfile.write(b"Haven Bot is running!")
     def do_HEAD(self):
         self.send_response(200)
         self.end_headers()
