@@ -1,5 +1,6 @@
 import discord
 from discord import app_commands
+from discord.ext import tasks
 import random
 import os
 import threading
@@ -426,6 +427,147 @@ fortunes = [
     "🥠 One day at a time. One breath at a time. That's all. 🌙",
 ]
 
+# ── NEW: fun & community content ──────────────────────────────
+
+fox_facts = [
+    "🦊 Foxes make over 40 different sounds to talk to each other.",
+    "🦊 A group of foxes is called a 'skulk' or a 'leash.'",
+    "🦊 Foxes have whiskers on their legs, not just their faces, to help them navigate.",
+    "🦊 Baby foxes are called 'kits' — they're born deaf and blind, and their family keeps them safe until they grow.",
+    "🦊 Foxes can sense the Earth's magnetic field. They have a built-in compass. 🧭",
+    "🦊 Arctic foxes survive temperatures as low as -70°C by curling up and tucking their tail around them like a blanket.",
+    "🦊 A fox's fluffy tail (called a 'brush') helps it balance, stay warm, and signal to other foxes.",
+    "🦊 Foxes purr when they're happy, a little like cats. 💙",
+    "🦊 Foxes 'pounce' by leaping high and landing on their prey — and sometimes they do it just for fun.",
+    "🦊 Red foxes can run up to 30 mph, but they'd still rather nap in a warm, sunny spot.",
+    "🦊 Foxes live on every continent except Antarctica. They're survivors — just like you. 💙",
+    "🦊 Fennec foxes have huge ears to stay cool and hear the tiniest sounds. Little, but mighty. ✨",
+]
+
+compliments = [
+    "You have a kind of warmth that makes people feel safe around you.",
+    "The world is a little softer because you're in it.",
+    "You notice the small things other people miss — that's a rare gift.",
+    "Your presence matters more than you probably realize.",
+    "You're the kind of person people are lucky to know.",
+    "There's a quiet strength in you that doesn't need to be loud to be real.",
+    "You care deeply, and that's a superpower, not a weakness.",
+    "You make hard days a little easier for the people around you.",
+    "Your heart is bigger than you give yourself credit for.",
+    "You're doing so much better than you think you are.",
+    "Something about you makes people feel a little more understood.",
+    "You bring a light that's completely your own.",
+    "You've survived every single hard day — that takes real strength.",
+    "You deserve the same kindness you give everyone else.",
+    "Just by being here, you make this place better. 💙",
+]
+
+hype_lines = [
+    "🎉 EVERYONE LOOK — {name} is INCREDIBLE and we're so lucky to have them here! 💙",
+    "🔥 {name} is out here being an absolute legend and doesn't even realize it! 🦊",
+    "✨ Attention: {name} is a certified amazing human. This is your official reminder! 💕",
+    "📣 {name}!! You are STRONG, you are KIND, and you are absolutely CRUSHING IT! 💙",
+    "🌟 The fox council has met and unanimously declared {name} a treasure! 🦊💙",
+    "💪 {name}, you've got this. You ALWAYS have this. We believe in you so much! ✨",
+    "🎊 Big love for {name} today — you matter, you're appreciated, and you're doing great! 💕",
+    "🦊 {name} is the kind of person that makes this community feel like home. We see you! 💙",
+    "⭐ Drop everything — {name} deserves to hear that they're wonderful. Because they are. ✨",
+    "💙 {name}, whatever today threw at you, you're still standing. That's hero stuff. 🦊",
+]
+
+would_you_rather = [
+    {"a": "have the power to heal others' sadness", "b": "have the power to feel pure peace whenever you want"},
+    {"a": "live in a cozy cottage in the forest", "b": "live in a little house by the sea"},
+    {"a": "have a pet fox", "b": "have a small, friendly pet dragon"},
+    {"a": "always hear your favorite song softly in the background", "b": "always smell your favorite comforting scent"},
+    {"a": "be able to talk to animals", "b": "be able to speak every human language"},
+    {"a": "have a perfect cozy rainy day", "b": "have a perfect warm sunny day"},
+    {"a": "read minds", "b": "see one day into the future"},
+    {"a": "have unlimited books", "b": "have unlimited music"},
+    {"a": "get the deepest, most restful sleep tonight", "b": "wake up tomorrow full of energy and hope"},
+    {"a": "be a gentle breeze", "b": "be a warm ray of sunlight"},
+    {"a": "have a cozy campfire with friends", "b": "have a quiet night alone under the stars"},
+    {"a": "always give the best hugs in the world", "b": "always know the right thing to say"},
+]
+
+truths = [
+    "What's one small thing that made you smile recently? 💙",
+    "Who is someone you're grateful to have in your life, and why?",
+    "What's a song that always makes you feel something?",
+    "What's one thing you're proud of yourself for lately — even something small? 🦊",
+    "If you could tell your past self one kind thing, what would it be?",
+    "What's your comfort food, movie, or show when you need to feel safe?",
+    "What's something you're quietly looking forward to?",
+    "What does a perfect, peaceful day look like for you?",
+    "What's one thing that always helps when you're having a hard time?",
+    "Who made you feel cared for recently?",
+    "What's a small act of kindness someone did for you that you never forgot?",
+    "What's something about yourself you're slowly learning to like? 💙",
+]
+
+eight_ball_answers = [
+    "Yes — and you deserve it. 💙",
+    "The signs are pointing to good things. ✨",
+    "Not yet… but soon. Be patient with yourself. 🌙",
+    "The fox says: trust yourself on this one. 🦊",
+    "It's looking brighter than you think. 💕",
+    "Maybe. But whatever happens, you'll be okay.",
+    "The stars say yes. And so do I. ⭐",
+    "Give it time — good things are on their way.",
+    "Absolutely. Don't doubt yourself so much. 💙",
+    "Focus on today. The rest will follow. 🌙",
+    "Your heart already knows the answer. Listen to it. 💕",
+    "Yes, but even if it were no — you'd still be enough. 🦊",
+    "The answer is kindness. It usually is. 💙",
+    "Hard to say… but you're stronger than the outcome either way. ✨",
+    "I believe so. And I believe in you. 🦊💙",
+]
+
+kindness_challenges = [
+    "💙 Message someone you haven't talked to in a while — just to say you're thinking of them.",
+    "🦊 Give yourself the same kindness you'd give a close friend today.",
+    "✨ Tell someone one specific thing you appreciate about them.",
+    "🌙 Do one small thing for future-you (lay out clothes, fill a water bottle, tidy a corner).",
+    "💕 Leave a kind comment somewhere online instead of scrolling past.",
+    "🦊 Check in on someone who's been quiet lately with a simple 'hey, how are you really?'",
+    "💙 Forgive yourself for one thing you've been carrying guilt about.",
+    "✨ Thank someone who usually gets overlooked.",
+    "🌙 Let someone know they made a difference for you, even a small one.",
+    "💕 Do something gentle for your body today — water, food, rest, a stretch.",
+    "🦊 Write down three things you like about yourself. Actually do it. 💙",
+    "✨ Ask for help with one thing, instead of carrying it all alone.",
+]
+
+vibes = [
+    "🌙 tonight's vibe: soft, sleepy, wrapped in a blanket. Protect your peace.",
+    "☀️ today's vibe: quietly hopeful. Something good is brewing.",
+    "🦊 your vibe: a cozy fox curled up by a warm fire. Rest — you've earned it.",
+    "✨ current vibe: main character in a slow, beautiful film. Take it easy.",
+    "🌊 your energy: calm ocean at dusk. Gentle, deep, and steady.",
+    "🕯️ tonight: candlelight and quiet. A soft reset is coming.",
+    "🍂 your vibe: warm sweater, hot drink, gentle music. Comfort mode: on.",
+    "💙 today's energy: healing. Even if you can't feel it, it's happening.",
+    "⭐ your vibe: a little tired, a lot resilient. Still shining anyway.",
+    "🌸 current mood: soft and brave at the same time. That's rare. That's you.",
+]
+
+cozy_scenes = [
+    "Picture this: rain tapping softly on the window, a blanket over your legs, something warm in your hands. Nowhere to be. Nothing to prove. Just this. 💙",
+    "Imagine a little cabin in the woods, a fire crackling, a sleepy fox curled at your feet. The world outside can wait. You're safe in here. 🦊",
+    "Soft lamp light. Your favorite song playing low. A cup of tea cooling beside you. Breathe it in. This moment is yours. 🕯️",
+    "You're wrapped in the softest blanket, fresh out of the dryer. Warm, heavy, safe. Let your shoulders drop. You can rest now. 🌙",
+    "A quiet morning, golden light through the curtains, no alarms. Just stillness and warmth and the gentle promise of a slow day. ✨",
+]
+
+# Rotating presence / status messages
+status_activities = [
+    discord.Activity(type=discord.ActivityType.watching, name="over you all 💙"),
+    discord.Activity(type=discord.ActivityType.listening, name="/help • I'm here 🦊"),
+    discord.Activity(type=discord.ActivityType.watching, name="the community, with love 💙"),
+    discord.CustomActivity(name="You're not alone. 🦊💙"),
+    discord.Activity(type=discord.ActivityType.listening, name="anyone who needs to talk 💙"),
+]
+
 # ══════════════════════════════════════════════════════════════
 #   VIEWS (INTERACTIVE BUTTONS)
 # ══════════════════════════════════════════════════════════════
@@ -486,6 +628,83 @@ class AloneView(discord.ui.View):
         await interaction.response.send_message(embed=embed, ephemeral=True)
 
 
+class WouldYouRatherView(discord.ui.View):
+    def __init__(self, option_a: str, option_b: str):
+        super().__init__(timeout=300)
+        self.option_a = option_a
+        self.option_b = option_b
+        self.votes_a = set()
+        self.votes_b = set()
+
+    def build_embed(self):
+        a = len(self.votes_a)
+        b = len(self.votes_b)
+        total = a + b
+
+        def line(n):
+            pct = int((n / total) * 100) if total else 0
+            filled = pct // 10
+            bar = "█" * filled + "░" * (10 - filled)
+            return f"{bar} {pct}%  ({n})"
+
+        embed = discord.Embed(title="🤔 Would You Rather...", color=discord.Color.teal())
+        embed.add_field(name=f"🅰️ {self.option_a}", value=line(a), inline=False)
+        embed.add_field(name=f"🅱️ {self.option_b}", value=line(b), inline=False)
+        embed.set_footer(text="Tap a button to vote! 🦊💙")
+        return embed
+
+    @discord.ui.button(label="🅰️ Option A", style=discord.ButtonStyle.primary)
+    async def vote_a(self, interaction: discord.Interaction, button: discord.ui.Button):
+        self.votes_b.discard(interaction.user.id)
+        self.votes_a.add(interaction.user.id)
+        await interaction.response.edit_message(embed=self.build_embed(), view=self)
+
+    @discord.ui.button(label="🅱️ Option B", style=discord.ButtonStyle.secondary)
+    async def vote_b(self, interaction: discord.Interaction, button: discord.ui.Button):
+        self.votes_a.discard(interaction.user.id)
+        self.votes_b.add(interaction.user.id)
+        await interaction.response.edit_message(embed=self.build_embed(), view=self)
+
+
+class RPSView(discord.ui.View):
+    def __init__(self):
+        super().__init__(timeout=120)
+
+    async def play(self, interaction: discord.Interaction, choice: str):
+        bot_choice = random.choice(["rock", "paper", "scissors"])
+        emoji = {"rock": "🪨", "paper": "📄", "scissors": "✂️"}
+        wins = [("rock", "scissors"), ("paper", "rock"), ("scissors", "paper")]
+        if choice == bot_choice:
+            result = "It's a tie! Great minds. 🦊"
+            color = discord.Color.greyple()
+        elif (choice, bot_choice) in wins:
+            result = "You win! 🎉 The fox is proud of you. 💙"
+            color = discord.Color.green()
+        else:
+            result = "The fox wins this one! 🦊 Rematch? 💕"
+            color = discord.Color.orange()
+        embed = discord.Embed(title="🎮 Rock, Paper, Scissors", color=color)
+        embed.add_field(name="You chose", value=f"{emoji[choice]} {choice}", inline=True)
+        embed.add_field(name="Haven chose", value=f"{emoji[bot_choice]} {bot_choice}", inline=True)
+        embed.add_field(name="Result", value=result, inline=False)
+        embed.set_footer(text="Run /rps to play again! 🦊")
+        for child in self.children:
+            child.disabled = True
+        await interaction.response.edit_message(embed=embed, view=self)
+
+    @discord.ui.button(label="🪨 Rock", style=discord.ButtonStyle.secondary)
+    async def rock(self, interaction: discord.Interaction, button: discord.ui.Button):
+        await self.play(interaction, "rock")
+
+    @discord.ui.button(label="📄 Paper", style=discord.ButtonStyle.secondary)
+    async def paper(self, interaction: discord.Interaction, button: discord.ui.Button):
+        await self.play(interaction, "paper")
+
+    @discord.ui.button(label="✂️ Scissors", style=discord.ButtonStyle.secondary)
+    async def scissors(self, interaction: discord.Interaction, button: discord.ui.Button):
+        await self.play(interaction, "scissors")
+
+
 # ══════════════════════════════════════════════════════════════
 #   EVENTS
 # ══════════════════════════════════════════════════════════════
@@ -499,10 +718,85 @@ async def on_ready():
         print(f'Synced {len(synced)} command(s) ✨')
     except Exception as e:
         print(f'Failed to sync commands: {e}')
+    try:
+        await client.change_presence(activity=random.choice(status_activities))
+        if not rotate_status.is_running():
+            rotate_status.start()
+    except Exception as e:
+        print(f'Failed to set presence: {e}')
+
+
+@tasks.loop(minutes=15)
+async def rotate_status():
+    try:
+        await client.change_presence(activity=random.choice(status_activities))
+    except Exception as e:
+        print(f'Status rotation error: {e}')
+
+
+@tree.error
+async def on_app_command_error(interaction: discord.Interaction, error: app_commands.AppCommandError):
+    message = "Something went a little sideways on my end — but I'm still here with you. 💙 Try that again in a moment?"
+    try:
+        if interaction.response.is_done():
+            await interaction.followup.send(message, ephemeral=True)
+        else:
+            await interaction.response.send_message(message, ephemeral=True)
+    except Exception:
+        pass
+    print(f'Command error: {error}')
 
 
 # ══════════════════════════════════════════════════════════════
-#   NEW COMMANDS
+#   HELP
+# ══════════════════════════════════════════════════════════════
+
+@tree.command(name="help", description="See everything Haven can do 🦊💙")
+async def help_command(interaction: discord.Interaction):
+    embed = discord.Embed(
+        title="🦊 Haven — Here For You",
+        description="A little companion for hard days, good days, and everything in between. 💙",
+        color=discord.Color.from_rgb(100, 149, 237)
+    )
+    embed.add_field(
+        name="💙 When you're struggling",
+        value="`/alone` `/empty` `/night` `/vent` `/stayhere` `/resources`",
+        inline=False
+    )
+    embed.add_field(
+        name="🌙 Calm & grounding",
+        value="`/breathe` `/grounding` `/calm` `/sleep` `/cope`",
+        inline=False
+    )
+    embed.add_field(
+        name="💕 Comfort & warmth",
+        value="`/affirmation` `/letter` `/warmth` `/cozy` `/pet` `/selfesteem` `/selfcare`",
+        inline=False
+    )
+    embed.add_field(
+        name="✨ Reflect & grow",
+        value="`/mood` `/checkin` `/journal` `/gratitude` `/fortune`",
+        inline=False
+    )
+    embed.add_field(
+        name="🎉 Fun & community",
+        value=(
+            "`/hype` `/compliment` `/hug` `/checkup` `/wouldyourather`\n"
+            "`/rps` `/eightball` `/truth` `/foxfact` `/vibe` `/kindness`"
+        ),
+        inline=False
+    )
+    embed.add_field(
+        name="🤝 About",
+        value="`/safe` — our community values",
+        inline=False
+    )
+    embed.set_footer(text="You never have to be 'bad enough' to use these. You belong here. 💙🦊")
+    await interaction.response.send_message(embed=embed, ephemeral=True)
+
+
+# ══════════════════════════════════════════════════════════════
+#   SUPPORT COMMANDS
 # ══════════════════════════════════════════════════════════════
 
 @tree.command(name="alone", description="For when you're feeling alone, empty, or just need a hug 💙")
@@ -643,6 +937,17 @@ async def warmth(interaction: discord.Interaction):
     await interaction.response.send_message(embed=embed, ephemeral=True)
 
 
+@tree.command(name="cozy", description="A cozy little moment to wrap around you 🕯️")
+async def cozy(interaction: discord.Interaction):
+    embed = discord.Embed(
+        title="🕯️ Cozy Corner",
+        description=random.choice(cozy_scenes),
+        color=discord.Color.from_rgb(255, 182, 193)
+    )
+    embed.set_footer(text="Stay as long as you need. 🦊💙")
+    await interaction.response.send_message(embed=embed, ephemeral=True)
+
+
 @tree.command(name="vent", description="Say what's on your heart — Haven will just listen 🥹")
 @app_commands.describe(message="Say whatever you need to. No judgment, no advice. Just you being heard.")
 async def vent(interaction: discord.Interaction, message: str):
@@ -697,7 +1002,7 @@ async def stayhere(interaction: discord.Interaction):
 
 
 # ══════════════════════════════════════════════════════════════
-#   EXISTING COMMANDS (kept + expanded)
+#   CALM / GROUNDING COMMANDS
 # ══════════════════════════════════════════════════════════════
 
 @tree.command(name="breathe", description="Guided breathing exercise to help you calm down 🌙")
@@ -1167,6 +1472,100 @@ async def selfesteem(interaction: discord.Interaction):
 
 
 # ══════════════════════════════════════════════════════════════
+#   FUN & COMMUNITY COMMANDS
+# ══════════════════════════════════════════════════════════════
+
+@tree.command(name="hype", description="Hype someone up with some over-the-top love 🎉")
+@app_commands.describe(member="Who deserves some hype?")
+async def hype(interaction: discord.Interaction, member: discord.Member):
+    await interaction.response.send_message(random.choice(hype_lines).format(name=member.mention))
+
+
+@tree.command(name="compliment", description="Give a genuine compliment — to someone else or yourself 💕")
+@app_commands.describe(member="Who to compliment? (leave empty to compliment yourself)")
+async def compliment(interaction: discord.Interaction, member: discord.Member = None):
+    target = member.mention if member else interaction.user.mention
+    embed = discord.Embed(
+        title="💕 A Little Truth For You",
+        description=f"{target} — {random.choice(compliments)}",
+        color=discord.Color.from_rgb(255, 105, 180)
+    )
+    embed.set_footer(text="And it's true, by the way. 🦊💙")
+    await interaction.response.send_message(embed=embed)
+
+
+@tree.command(name="foxfact", description="A cute little fox fact 🦊")
+async def foxfact(interaction: discord.Interaction):
+    embed = discord.Embed(
+        title="🦊 Fox Fact",
+        description=random.choice(fox_facts),
+        color=discord.Color.orange()
+    )
+    embed.set_footer(text="The more you know 🦊✨")
+    await interaction.response.send_message(embed=embed)
+
+
+@tree.command(name="eightball", description="Ask the magic fox 8-ball a question 🔮")
+@app_commands.describe(question="What do you want to ask?")
+async def eightball(interaction: discord.Interaction, question: str):
+    embed = discord.Embed(title="🔮 The Magic Fox 8-Ball", color=discord.Color.purple())
+    embed.add_field(name="You asked:", value=question, inline=False)
+    embed.add_field(name="The fox says:", value=random.choice(eight_ball_answers), inline=False)
+    embed.set_footer(text="(for fun — but also, a little bit true 💙)")
+    await interaction.response.send_message(embed=embed)
+
+
+@tree.command(name="wouldyourather", description="A wholesome would-you-rather the whole server can vote on 🤔")
+async def wouldyourather(interaction: discord.Interaction):
+    q = random.choice(would_you_rather)
+    view = WouldYouRatherView(q["a"], q["b"])
+    await interaction.response.send_message(embed=view.build_embed(), view=view)
+
+
+@tree.command(name="truth", description="A gentle question to reflect on or share with the community 💭")
+async def truth(interaction: discord.Interaction):
+    embed = discord.Embed(
+        title="💭 A Little Question",
+        description=random.choice(truths),
+        color=discord.Color.blue()
+    )
+    embed.set_footer(text="Share if you want to — or just sit with it. 🦊💙")
+    await interaction.response.send_message(embed=embed)
+
+
+@tree.command(name="rps", description="Play rock-paper-scissors with Haven 🎮")
+async def rps(interaction: discord.Interaction):
+    embed = discord.Embed(
+        title="🎮 Rock, Paper, Scissors",
+        description="Pick your move! The fox is ready. 🦊",
+        color=discord.Color.blurple()
+    )
+    await interaction.response.send_message(embed=embed, view=RPSView())
+
+
+@tree.command(name="vibe", description="A little vibe check — what's your energy right now? ✨")
+async def vibe(interaction: discord.Interaction):
+    embed = discord.Embed(
+        title="✨ Vibe Check",
+        description=random.choice(vibes),
+        color=discord.Color.from_rgb(147, 112, 219)
+    )
+    embed.set_footer(text="Whatever your vibe, you're welcome here. 🦊💙")
+    await interaction.response.send_message(embed=embed)
+
+
+@tree.command(name="kindness", description="A small kindness challenge — for others or yourself 💙")
+async def kindness(interaction: discord.Interaction):
+    embed = discord.Embed(
+        title="💙 Today's Kindness Challenge",
+        description=random.choice(kindness_challenges),
+        color=discord.Color.green()
+    )
+    embed.set_footer(text="Small kindness changes everything. Starting with you. 🦊")
+    await interaction.response.send_message(embed=embed)
+
+
+# ══════════════════════════════════════════════════════════════
 #   CHECK-IN MODAL
 # ══════════════════════════════════════════════════════════════
 
@@ -1216,9 +1615,9 @@ class CheckInForm(discord.ui.Modal, title="📋 Mental Health Check-In"):
         )
         embed.set_thumbnail(url=interaction.user.display_avatar.url)
         embed.add_field(name="Feeling word(s):", value=self.feeling_words.value, inline=False)
-        embed.add_field(name="─────────────────────", value="​", inline=False)
+        embed.add_field(name="─────────────────────", value="", inline=False)
         embed.add_field(name="Scales (0-10):", value=self.scales.value, inline=False)
-        embed.add_field(name="─────────────────────", value="​", inline=False)
+        embed.add_field(name="─────────────────────", value="", inline=False)
         embed.add_field(name="Right now / Struggling:", value=self.doing_now.value, inline=False)
         embed.add_field(name="Coping, care, smile, felt good:", value=self.coping_and_care.value, inline=False)
         embed.add_field(name="What I need:", value=self.need_now.value, inline=False)
